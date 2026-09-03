@@ -26,6 +26,7 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//button[text()='Login']")
     WebElement btnLogin;
 
+
     public void typeLoginRegistrationForm(UserLombok user) {
         inputEmail.sendKeys(user.getUsername());
         inputPassword.sendKeys(user.getPassword());
@@ -33,6 +34,10 @@ public class LoginPage extends BasePage {
 
     public void clickBtnRegistration() {
         btnRegistration.click();
+    }
+
+    public void clickBtnLogin() {
+        btnLogin.click();
     }
 }
 

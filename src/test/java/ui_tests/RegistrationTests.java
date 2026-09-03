@@ -21,7 +21,7 @@ public class RegistrationTests extends AppManager {
 
     @BeforeMethod
     public void goToRegistrationLoginPage() {
-        new HomePage(getDriver()).clickBtnLogin();
+        new HomePage(getDriver()).clickLinkLogin();
         loginPage = new LoginPage(getDriver());
     }
 
