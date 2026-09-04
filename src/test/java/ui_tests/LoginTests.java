@@ -1,5 +1,6 @@
 package ui_tests;
 
+import data_providers.UserDataProvider;
 import dto.UserLombok;
 import manager.AppManager;
 import org.testng.Assert;
@@ -11,6 +12,7 @@ import pages.HomePage;
 import pages.LoginPage;
 
 import static utils.PropertiesReader.*;
+import static utils.UserFactory.positiveUser;
 
 public class LoginTests extends AppManager {
 
@@ -49,5 +51,40 @@ public class LoginTests extends AppManager {
                 "Wrong email or password");
 //        Assert.assertTrue(loginPage.closeAlert()
 //                .contains("Wrong email or password"));
+    }
+
+    @Test
+    public void loginNegativeEmptyEmailFieldTest() {
+        UserLombok user = positiveUser();
+        user.setUsername("");
+
+        loginPage.typeLoginRegistrationForm(user);
+        loginPage.clickBtnRegistration();
+
+        Assert.assertTrue(loginPage.closeAlert()
+                .contains("Wrong email or password format"));
+    }
+
+    @Test
+    public void loginNegativeEmptyPasswordFieldTest() {
+        UserLombok user = positiveUser();
+        user.setPassword("");
+
+        loginPage.typeLoginRegistrationForm(user);
+        loginPage.clickBtnRegistration();
+
+        Assert.assertTrue(loginPage.closeAlert()
+                .contains("Wrong email or password format"));
+    }
+
+    @Test(dataProvider = "dataProviderWrongPasswordOrEmail",
+            dataProviderClass = UserDataProvider.class)
+    public void loginNegativeWrongPasswordOrEmailTest(UserLombok user) {
+
+        loginPage.typeLoginRegistrationForm(user);
+        loginPage.clickBtnLogin();
+
+        Assert.assertTrue(loginPage.closeAlert()
+                .contains("Wrong email or password"));
     }
 }
