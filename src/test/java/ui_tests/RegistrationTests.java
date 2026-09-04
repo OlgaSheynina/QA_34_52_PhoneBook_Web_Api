@@ -1,6 +1,7 @@
 package ui_tests;
 
 import data_providers.UserDataProvider;
+import dto.User;
 import dto.UserLombok;
 import manager.AppManager;
 import org.testng.Assert;
@@ -25,20 +26,30 @@ public class RegistrationTests extends AppManager {
         loginPage = new LoginPage(getDriver());
     }
 
+
     @Test
     public void registrationPositiveTest() {
-        int i = new Random().nextInt(1000);
-        UserLombok user = UserLombok.builder()
-                .username("gavana" + i + "55@club.com")
-                .password("Adfert55!")
-                .build();
-
+        UserLombok user = positiveUser();
         loginPage.typeLoginRegistrationForm(user);
         loginPage.clickBtnRegistration();
 
         Assert.assertTrue(new ContactsPage(getDriver())
-                .validateTextInMessageNoContacts("No Contacts here!"));
+               .validateTextInMessageNoContacts("No Contacts here!"));
     }
+//    @Test
+//    public void registrationPositiveTest() {
+//        int i = new Random().nextInt(1000);
+//        UserLombok user = UserLombok.builder()
+//                .username("gavana" + i + "55@club.com")
+//                .password("Adfert55!")
+//                .build();
+//
+//        loginPage.typeLoginRegistrationForm(user);
+//        loginPage.clickBtnRegistration();
+//
+//        Assert.assertTrue(new ContactsPage(getDriver())
+//                .validateTextInMessageNoContacts("No Contacts here!"));
+//    }
 
     @Test
     public void registrationPositiveWithFakerTest() {
@@ -54,7 +65,7 @@ public class RegistrationTests extends AppManager {
     }
 
     @Test
-    public void registrationNegativeEmptyAllFieldsTest() {
+    public void registrationNegativeAllFieldsEmptyWOTypeFormTest() {
 
         loginPage.clickBtnRegistration();
 
@@ -86,9 +97,10 @@ public class RegistrationTests extends AppManager {
                 .contains("Wrong email or password format"));
     }
 
-    @Test(dataProvider = "dataProviderWrongPasswordOrEmail",
-            dataProviderClass = UserDataProvider.class)
-    public void registrationNegativeWrongPasswordTest(UserLombok user) {
+    @Test
+    public void registrationNegativeWithExistedInDBEmail() {
+        UserLombok user = positiveUser();
+        user.setUsername("email");
 
         loginPage.typeLoginRegistrationForm(user);
         loginPage.clickBtnRegistration();
@@ -96,6 +108,18 @@ public class RegistrationTests extends AppManager {
         Assert.assertTrue(loginPage.closeAlert()
                 .contains("Wrong email or password format"));
     }
+
+    @Test(dataProvider = "dataProviderWrongPasswordOrEmail",
+            dataProviderClass = UserDataProvider.class)
+    public void registrationNegativeWrongPasswordOrEmailTest(UserLombok user) {
+
+        loginPage.typeLoginRegistrationForm(user);
+        loginPage.clickBtnRegistration();
+
+        Assert.assertTrue(loginPage.closeAlert()
+                .contains("Wrong email or password format"));
+    }
+
 
 
 //    @Test
