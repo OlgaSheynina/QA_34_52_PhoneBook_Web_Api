@@ -8,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import pages.ContactsPage;
 import pages.HomePage;
 import pages.LoginPage;
@@ -19,11 +20,13 @@ import java.util.Random;
 public class RegistrationTests extends AppManager {
 
     LoginPage loginPage;
+    SoftAssert softAssert = new SoftAssert();
 
     @BeforeMethod
     public void goToRegistrationLoginPage() {
         new HomePage(getDriver()).clickLinkLogin();
         loginPage = new LoginPage(getDriver());
+        logger.info("Start registration test");
     }
 
 
@@ -34,7 +37,7 @@ public class RegistrationTests extends AppManager {
         loginPage.clickBtnRegistration();
 
         Assert.assertTrue(new ContactsPage(getDriver())
-               .validateTextInMessageNoContacts("No Contacts here!"));
+                .validateTextInMessageNoContacts("No Contacts here!"));
     }
 //    @Test
 //    public void registrationPositiveTest() {
